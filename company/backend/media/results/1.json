@@ -1,0 +1,122 @@
+{
+  "transcript": "¡Ejua!",
+  "speech": {
+    "duration_sec": 45.55,
+    "wpm": 1.3,
+    "silence_sec": 10.34,
+    "fillers": 0
+  },
+  "text": {
+    "sentiment": {
+      "label": "positive",
+      "score": 0.4217776656150818
+    },
+    "summary": "Â¡Ejua!"
+  },
+  "nonverbal": {
+    "eye_contact_ratio": 0.0,
+    "nods": 0,
+    "emotions": {
+      "model": "emotion-ferplus-onnx",
+      "samples": 1,
+      "distribution": {
+        "neutral": 1.0,
+        "happiness": 0.0,
+        "surprise": 0.0,
+        "sadness": 0.0,
+        "anger": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "contempt": 0.0
+      },
+      "dominant_emotion": "neutral",
+      "timeline": [
+        {
+          "t": 2.49,
+          "emotion": "neutral",
+          "prob": 0.7436
+        }
+      ],
+      "smoothed_win": 3,
+      "sample_fps": 2,
+      "max_width": 960
+    }
+  },
+  "qa": {
+    "verbal_from_qa": 0.0,
+    "scores": {
+      "avg_out_of_10": 0.0,
+      "items": [
+        {
+          "idx": 0,
+          "question": "Qst D1",
+          "answer_preview": "Â¡",
+          "scores": {
+            "sim": 0.0,
+            "ce": 0.0,
+            "final": 0.0,
+            "out_of_10": 0.0
+          }
+        },
+        {
+          "idx": 1,
+          "question": "Qst D4",
+          "answer_preview": "E",
+          "scores": {
+            "sim": 0.0,
+            "ce": 0.0,
+            "final": 0.0,
+            "out_of_10": 0.0
+          }
+        },
+        {
+          "idx": 2,
+          "question": "Qst F5",
+          "answer_preview": "j",
+          "scores": {
+            "sim": 0.0,
+            "ce": 0.0,
+            "final": 0.0,
+            "out_of_10": 0.0
+          }
+        },
+        {
+          "idx": 3,
+          "question": "Qst M2",
+          "answer_preview": "u",
+          "scores": {
+            "sim": 0.0,
+            "ce": 0.0,
+            "final": 0.0,
+            "out_of_10": 0.0
+          }
+        },
+        {
+          "idx": 4,
+          "question": "Qst M5",
+          "answer_preview": "a",
+          "scores": {
+            "sim": 0.0,
+            "ce": 0.0,
+            "final": 0.0,
+            "out_of_10": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "scores": {
+    "verbal": 5.7,
+    "paraverbal": 6.2,
+    "nonverbal": 0.0,
+    "raw_total": 11.9,
+    "total": 1.2,
+    "quality": "non_exploitable",
+    "reason": {
+      "duration_sec": 45.55,
+      "wpm": 1.3,
+      "spoken_ratio": 0.773
+    },
+    "penalty": 0.9
+  }
+}

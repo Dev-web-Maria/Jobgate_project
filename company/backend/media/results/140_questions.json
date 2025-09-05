@@ -1,0 +1,1 @@
+[{"question": "jb", "seconds": 60.0}, {"question": "M. Quelle est la différence entre std::vector et std::list ? Quand utiliser l’un plutôt que l’autre ?", "seconds": 90.0}, {"question": "D. Quelle est la différence entre un unique_ptr, un shared_ptr et un weak_ptr dans la gestion mémoire moderne en C++ ?", "seconds": 120.0}]

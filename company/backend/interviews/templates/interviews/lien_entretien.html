@@ -1,0 +1,4 @@
+<h2>Lien entretien pour {{ candidat.nomComplet }}</h2>
+<p><strong>Offre :</strong> {{ offre.titre }}</p>
+<p><a href="{{ lien }}" target="_blank">{{ lien }}</a></p>
+<a href="{% url 'liste_candidats_offre' offre.id %}">Retour à la liste des candidats</a>

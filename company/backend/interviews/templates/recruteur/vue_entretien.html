@@ -1,0 +1,14 @@
+<h1>Welcome to deferred maintenance</h1>
+
+<p><strong>Candidate:</strong> {{ candidat.nomComplet }}</p>
+
+<p><strong>Position:</strong> {{ offre.titre }}</p>
+
+<p><strong>Questions:</strong></p>
+<ul>
+  {% for question in questions %}
+    <li>{{ question.texte }} (Durée limite: {{ question.duree_limite }} secondes)</li>
+  {% empty %}
+    <li>No questions available.</li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,325 @@
+{
+  "transcript": "Que signifie RAA ? Il ressources acquises ça en C++ ? Question 2, quelle est la différence entre virtuales, virtuales ou worldwide ? Question 3, quelle est la différence entre un unique PTR ? Un chat PTR et un week PTR dans la gestion mémoire ? En C++ ?",
+  "speech": {
+    "duration_sec": 22.59,
+    "wpm": 114.2,
+    "silence_sec": 7.68,
+    "fillers": 0
+  },
+  "text": {
+    "sentiment": {
+      "label": "neutral",
+      "score": 0.7184790968894958
+    },
+    "summary": " Que signifie RAA ? Il ressources acquises acquises Ã§a en C++ ? Question 2, quelle est la diffÃ©rence entre virtuales,"
+  },
+  "nonverbal": {
+    "eye_contact_ratio": 0.37,
+    "nods": 1,
+    "emotions": {
+      "model": "emotion-ferplus-onnx",
+      "samples": 46,
+      "distribution": {
+        "neutral": 1.0,
+        "happiness": 0.0,
+        "surprise": 0.0,
+        "sadness": 0.0,
+        "anger": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "contempt": 0.0
+      },
+      "dominant_emotion": "neutral",
+      "timeline": [
+        {
+          "t": 0.0,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 0.5,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 1.0,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 1.5,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 2.0,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 2.5,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 3.0,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 3.5,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 4.0,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 4.5,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 5.0,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 5.49,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 5.99,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 6.49,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 6.99,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 7.49,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 7.99,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 8.49,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 8.99,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 9.49,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 9.99,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 10.49,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 10.99,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 11.49,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 11.99,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 12.49,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 12.99,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 13.49,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 13.99,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 14.49,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 14.99,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 15.49,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 15.99,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 16.48,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 16.98,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 17.48,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 17.98,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 18.48,
+          "emotion": "neutral",
+          "prob": 0.7438
+        },
+        {
+          "t": 18.98,
+          "emotion": "neutral",
+          "prob": 0.7438
+        },
+        {
+          "t": 19.48,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 19.98,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 20.48,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 20.98,
+          "emotion": "neutral",
+          "prob": 0.7438
+        },
+        {
+          "t": 21.48,
+          "emotion": "neutral",
+          "prob": 0.7437
+        },
+        {
+          "t": 21.98,
+          "emotion": "neutral",
+          "prob": 0.7438
+        },
+        {
+          "t": 22.48,
+          "emotion": "neutral",
+          "prob": 0.7438
+        }
+      ],
+      "smoothed_win": 3,
+      "sample_fps": 2,
+      "max_width": 960
+    }
+  },
+  "qa": {
+    "verbal_from_qa": 32.8,
+    "scores": {
+      "avg_out_of_10": 8.2,
+      "items": [
+        {
+          "idx": 0,
+          "question": "F. Que signifie RAII (Resource Acquisition Is Initialization) en C++ ?",
+          "answer_preview": "Que signifie RAA ? Il ressources acquises Ã§a en C++ ? Question 2, quelle est la diff",
+          "scores": {
+            "sim": 0.847,
+            "ce": 0.646,
+            "final": 0.716,
+            "out_of_10": 6.5
+          }
+        },
+        {
+          "idx": 1,
+          "question": "M. Quelle est la diffÃ©rence entre virtual, pure virtual et override ?",
+          "answer_preview": "Ã©rence entre virtuales, virtuales ou worldwide ? Question 3, quelle est la diffÃ©renc",
+          "scores": {
+            "sim": 0.886,
+            "ce": 0.983,
+            "final": 0.949,
+            "out_of_10": 9.4
+          }
+        },
+        {
+          "idx": 2,
+          "question": "D. Quelle est la diffÃ©rence entre un unique_ptr, un shared_ptr et un weak_ptr dans la gestion mÃ©moire moderne en C++ ?",
+          "answer_preview": "e entre un unique PTR ? Un chat PTR et un week PTR dans la gestion mÃ©moire ? En C++ ",
+          "scores": {
+            "sim": 0.872,
+            "ce": 0.917,
+            "final": 0.901,
+            "out_of_10": 8.8
+          }
+        }
+      ]
+    }
+  },
+  "scores": {
+    "verbal": 20.5,
+    "paraverbal": 15.4,
+    "nonverbal": 16.8,
+    "raw_total": 52.7,
+    "total": 44.8,
+    "quality": "low_confidence",
+    "reason": {
+      "duration_sec": 22.59,
+      "wpm": 114.2,
+      "silence_ratio": 0.34
+    },
+    "penalty": 0.15
+  }
+}

@@ -1,0 +1,3 @@
+file 'C:\dev\company\backend\media\segments\e58bfcc7-b180-4137-bcc2-3f61b91edd22\part0.webm'
+file 'C:\dev\company\backend\media\segments\e58bfcc7-b180-4137-bcc2-3f61b91edd22\part1.webm'
+file 'C:\dev\company\backend\media\segments\e58bfcc7-b180-4137-bcc2-3f61b91edd22\part2.webm'

@@ -1,0 +1,356 @@
+{
+  "transcript": "Question numéro 1, M5. Question numéro 2, F3. Question numéro 4, T2.",
+  "speech": {
+    "duration_sec": 15.23,
+    "wpm": 47.3,
+    "silence_sec": 5.89,
+    "fillers": 0
+  },
+  "text": {
+    "sentiment": {
+      "label": "neutral",
+      "score": 0.8837406635284424
+    },
+    "summary": "Question numÃ©ro 1, M5. Question numÃ©ro 2, F3. Question numÃ©ro 4, T2."
+  },
+  "nonverbal": {
+    "eye_contact_ratio": 1.0,
+    "nods": 0,
+    "emotions": {
+      "model": "emotion-ferplus-onnx",
+      "samples": 50,
+      "distribution": {
+        "neutral": 1.0,
+        "happiness": 0.0,
+        "surprise": 0.0,
+        "sadness": 0.0,
+        "anger": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "contempt": 0.0
+      },
+      "dominant_emotion": "neutral",
+      "timeline": [
+        {
+          "t": 0.0,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 0.38,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 0.77,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 1.15,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 1.54,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 1.92,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 2.31,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 2.69,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 3.08,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 3.46,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 3.85,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 4.23,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 4.61,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 5.0,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 5.38,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 5.77,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 6.15,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 6.54,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 6.92,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 7.31,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 7.69,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 8.08,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 8.46,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 8.84,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 9.23,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 9.61,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 10.0,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 10.38,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 10.77,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 11.15,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 11.54,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 11.92,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 12.31,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 12.69,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 13.08,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 13.46,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 13.84,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 14.23,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 14.61,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 15.0,
+          "emotion": "neutral",
+          "prob": 0.7449
+        },
+        {
+          "t": 15.38,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 15.77,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 16.15,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 16.54,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 16.92,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 17.31,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 17.69,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 18.07,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 18.46,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 18.84,
+          "emotion": "neutral",
+          "prob": 0.7446
+        }
+      ],
+      "smoothed_win": 3,
+      "sample_fps": 2,
+      "max_width": 960
+    }
+  },
+  "qa": {
+    "verbal_from_qa": 3.6,
+    "scores": {
+      "avg_out_of_10": 0.9,
+      "items": [
+        {
+          "idx": 0,
+          "question": "F3",
+          "answer_preview": "Question numÃ©ro 1",
+          "scores": {
+            "sim": 0.643,
+            "ce": 0.0,
+            "final": 0.225,
+            "out_of_10": 0.3
+          }
+        },
+        {
+          "idx": 1,
+          "question": "M4",
+          "answer_preview": ", M5. Question nu",
+          "scores": {
+            "sim": 0.88,
+            "ce": 0.064,
+            "final": 0.35,
+            "out_of_10": 1.9
+          }
+        },
+        {
+          "idx": 2,
+          "question": "D2",
+          "answer_preview": "mÃ©ro 2, F3. Quest",
+          "scores": {
+            "sim": 0.714,
+            "ce": 0.0,
+            "final": 0.25,
+            "out_of_10": 0.6
+          }
+        },
+        {
+          "idx": 3,
+          "question": "F2",
+          "answer_preview": "ion numÃ©ro 4, T2.",
+          "scores": {
+            "sim": 0.759,
+            "ce": 0.003,
+            "final": 0.268,
+            "out_of_10": 0.8
+          }
+        }
+      ]
+    }
+  },
+  "scores": {
+    "verbal": 17.6,
+    "paraverbal": 2.3,
+    "nonverbal": 30.0,
+    "raw_total": 49.9,
+    "total": 34.9,
+    "quality": "low_confidence",
+    "reason": {
+      "duration_sec": 15.23,
+      "wpm": 47.3,
+      "silence_ratio": 0.387
+    },
+    "penalty": 0.3
+  }
+}

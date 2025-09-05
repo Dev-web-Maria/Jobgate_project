@@ -1,0 +1,51 @@
+<form method="POST" action="{% url 'question_form' %}">
+    {% csrf_token %}
+    <label for="offre">Choose an offer:</label>
+    <select name="offre" required onchange="this.form.submit();">
+        <option value="">— Choose an offer —</option>
+        {% for offre in offres %}
+            <option value="{{ offre.id }}" {% if offre.id == selected_offre_code %}selected{% endif %}>
+                {{ offre.titre }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label for="texte">Question :</label>
+    <input type="text" name="texte" required>
+
+    <button type="submit" name="action" value="add">Add</button>
+</form>
+
+<h3>Questions related to the selected offer:</h3>
+
+{% if questions %}
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Question</th>
+                <th>Action</th>  <!-- Nouvelle colonne pour le bouton supprimer -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for q in questions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ q.texte }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'question_form' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="question_id" value="{{ q.id }}">
+                            <input type="hidden" name="offre" value="{{ selected_offre_code }}">
+                            <button type="submit" name="action" value="delete" onclick="return confirm('Voulez-vous vraiment supprimer cette question ?');">
+                                Supprimer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No questions for this offer.</p>
+{% endif %}
