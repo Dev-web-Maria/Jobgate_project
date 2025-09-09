@@ -1,1 +1,0 @@
-[{"question": "F. Que signifie RAII (Resource Acquisition Is Initialization) en C++ ?", "seconds": 60.0}, {"question": "M. Quelle est la différence entre virtual, pure virtual et override ?", "seconds": 90.0}, {"question": "D. Quelle est la différence entre une exception levée par throw et une erreur de segmentation (segfault) ? Comment les gérer ?", "seconds": 120.0}]
