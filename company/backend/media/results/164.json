@@ -1,0 +1,385 @@
+{
+  "transcript": "Question 1, Gb. Question 3, qui est la différence entre est-ce des defecteurs et est-ce des listes quand l'utiliser, quand tu utilises les plus tôt que l'autre ? Question 3, qui est la différence entre mixtépes sans lever par throw et une erreur de séquement passion, sec-folds, comment les gérer ?",
+  "speech": {
+    "duration_sec": 25.74,
+    "wpm": 125.9,
+    "silence_sec": 9.83,
+    "fillers": 0
+  },
+  "text": {
+    "sentiment": {
+      "label": "neutral",
+      "score": 0.5132495164871216
+    },
+    "summary": " Question 3, qui est la diffÃ©rence entre mixtÃ©pes sans lever par throw et une erreur de sÃ©quement passion, sec-folds, comment"
+  },
+  "nonverbal": {
+    "eye_contact_ratio": 0.81,
+    "nods": 39,
+    "emotions": {
+      "model": "emotion-ferplus-onnx",
+      "samples": 58,
+      "distribution": {
+        "neutral": 1.0,
+        "happiness": 0.0,
+        "surprise": 0.0,
+        "sadness": 0.0,
+        "anger": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "contempt": 0.0
+      },
+      "dominant_emotion": "neutral",
+      "timeline": [
+        {
+          "t": 0.0,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 0.44,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 0.88,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 1.31,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 1.75,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 2.19,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 2.63,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 3.07,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 3.5,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 3.94,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 4.38,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 4.82,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 5.26,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 5.69,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 6.13,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 6.57,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 7.01,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 7.44,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 7.88,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 8.32,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 9.2,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 9.63,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 10.07,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 10.51,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 10.95,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 11.39,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 11.82,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 12.26,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 12.7,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 13.14,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 13.58,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 14.01,
+          "emotion": "neutral",
+          "prob": 0.7449
+        },
+        {
+          "t": 14.45,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 14.89,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 15.33,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 15.77,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 16.2,
+          "emotion": "neutral",
+          "prob": 0.7448
+        },
+        {
+          "t": 16.64,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 17.08,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 17.52,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 17.96,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 18.39,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 18.83,
+          "emotion": "neutral",
+          "prob": 0.7447
+        },
+        {
+          "t": 19.27,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 19.71,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 20.14,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 20.58,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 21.02,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 21.46,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 21.9,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 22.33,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 22.77,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 23.21,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 23.65,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 24.09,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 24.52,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 24.96,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 25.4,
+          "emotion": "neutral",
+          "prob": 0.7446
+        }
+      ],
+      "smoothed_win": 3,
+      "sample_fps": 2,
+      "max_width": 960
+    }
+  },
+  "qa": {
+    "verbal_from_qa": 15.6,
+    "scores": {
+      "avg_out_of_10": 3.9,
+      "items": [
+        {
+          "idx": 0,
+          "question": "jb",
+          "answer_preview": "Question 1, Gb. Question 3, qui est la diffÃ©rence entre est-ce des defecteurs et est-ce des listes ",
+          "scores": {
+            "sim": 0.611,
+            "ce": 0.0,
+            "final": 0.214,
+            "out_of_10": 0.2
+          }
+        },
+        {
+          "idx": 1,
+          "question": "M. Quelle est la diffÃ©rence entre std::vector et std::list ? Quand utiliser lâ€™un plutÃ´t que lâ€™autre ?",
+          "answer_preview": "quand l'utiliser, quand tu utilises les plus tÃ´t que l'autre ? Question 3, qui est la diffÃ©rence en",
+          "scores": {
+            "sim": 0.675,
+            "ce": 0.897,
+            "final": 0.819,
+            "out_of_10": 7.7
+          }
+        },
+        {
+          "idx": 2,
+          "question": "D. Quelle est la diffÃ©rence entre une exception levÃ©e par throw et une erreur de segmentation (segfault) ? Comment les gÃ©rer ?",
+          "answer_preview": "tre mixtÃ©pes sans lever par throw et une erreur de sÃ©quement passion, sec-folds, comment les gÃ©rer ",
+          "scores": {
+            "sim": 0.726,
+            "ce": 0.403,
+            "final": 0.516,
+            "out_of_10": 3.9
+          }
+        }
+      ]
+    }
+  },
+  "scores": {
+    "verbal": 19.5,
+    "paraverbal": 14.4,
+    "nonverbal": 30.0,
+    "raw_total": 63.9,
+    "total": 54.3,
+    "quality": "low_confidence",
+    "reason": {
+      "duration_sec": 25.74,
+      "wpm": 125.9,
+      "silence_ratio": 0.382
+    },
+    "penalty": 0.15
+  }
+}

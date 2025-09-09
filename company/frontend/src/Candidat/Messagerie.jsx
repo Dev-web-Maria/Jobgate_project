@@ -64,42 +64,62 @@ export default function Messagerie() {
 
     const formatted = entretiens.map((e) => {
       const token = e.token;
-      const entreprise =
-        e.offre__entreprise__nom ||
-        e.entreprise__nom ||
-        e.offre?.entreprise?.nom ||
-        "Entreprise";
-      const candidatNom =
-        e.candidat?.nomComplet ||
-        e.candidat_nomComplet ||
-        "Candidat";
 
       const read = localStorage.getItem(LS_READ(token)) === "1";
-      const startedAt = localStorage.getItem(LS_STARTED(token)); // ISO string or null
+      const startedAt = localStorage.getItem(LS_STARTED(token)); // ISO string ou null
 
-      const dateFin = e.date_limite || e.dateFinDisponibilite;
+      const dateFin = e.date_limite || e.dateFinDisponibilite || null;
       const expiredByDate = dateFin ? new Date(dateFin) < new Date() : false;
       const expiré = !!startedAt || expiredByDate;
 
-      // date à afficher sous le bouton :
-      // - si déjà lancé une fois -> date du premier clic
-      // - sinon -> date limite fixée par le recruteur
+      // date affichée sous le bouton :
       const expiredAt = startedAt || dateFin || null;
 
+      // Correction : récupérer le vrai nom du candidat et de l'entreprise si dispo
+      // On tente plusieurs chemins pour compatibilité avec différents formats d'objet
+      let nomEntreprise =
+        e.offre__entreprise__nom ||
+        e.entreprise__nom ||
+        e.offre?.entreprise?.nom ||
+        e.offre?.entreprise ||
+        e.offre?.recruteur?.entreprise ||
+        e.recruteur?.entreprise ||
+        (e.offre && typeof e.offre === "object" && e.offre.entreprise) ||
+        "Entreprise";
+
+      let candidatNom =
+        e.nomComplet ||
+        e.candidat_nomComplet ||
+        e.candidat?.nomComplet ||
+        (e.candidat && typeof e.candidat === "object" && e.candidat.nomComplet) ||
+        null;
+
+      // fallback pour éviter null/Entreprise si possible
+      if (!nomEntreprise || nomEntreprise === "Entreprise") {
+        if (e.offre && typeof e.offre === "object" && e.offre.recruteur && e.offre.recruteur.entreprise) {
+          nomEntreprise = e.offre.recruteur.entreprise;
+        }
+      }
+      if (!candidatNom) {
+        if (e.candidat && typeof e.candidat === "object" && e.candidat.nomComplet) {
+          candidatNom = e.candidat.nomComplet;
+        }
+      }
+
       return {
-        id: token,                // id stable = token
+        id: token, // id stable = token
         token,
-        nomEntreprise: entreprise,
+        nomEntreprise,
         candidatNom,
         objet: "Invitation à entretien vidéo différé",
-        dateReception: e.date_reception || e.date_creation || nowIso,
+        dateReception: e.date_reception || e.date_creation || null,
         lu: read,
-        dateDebutDisponibilite: e.date_debut || e.date_creation || nowIso,
-        dateFinDisponibilite: dateFin || null,
-        startedAt,                // si non null => l’entretien a déjà été lancé une fois
+        dateDebutDisponibilite: e.date_creation || null,
+        dateFinDisponibilite: dateFin,
+        startedAt,
         expiredAt,
         expiré,
-        poste: e.offre__titre || e.offre?.titre || "Poste",
+        poste: e.offre__titre || e.offre?.titre || null,
         status: (e.statut || "PENDING").toLowerCase(),
       };
     });
@@ -108,6 +128,8 @@ export default function Messagerie() {
     if (formatted.length && !selectedId) {
       setSelectedId(formatted[0].id);
     }
+
+    console.log("Invitations chargées :", formatted);
   }, [entretiens]); // eslint-disable-line
 
   // ----------- actions -----------
@@ -865,3 +887,4 @@ export default function Messagerie() {
     </>
   );
 }
+

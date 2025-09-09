@@ -288,7 +288,6 @@ class Entretien(models.Model):
     token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     date_creation = models.DateTimeField(auto_now_add=True)
-    # ✅ Nouveau: date de début (vous la renvoyez déjà dans la réponse)
     date_debut = models.DateTimeField(null=True, blank=True)
     date_limite = models.DateTimeField(null=True, blank=True)
 

@@ -1,0 +1,520 @@
+{
+  "transcript": "Question 1, question 2, qu'est-ce que le nat est à quoi sert-il ? Question 3, qu'est-ce que la différence entre hôte à chetatique et hôte à dynamique ?",
+  "speech": {
+    "duration_sec": 37.47,
+    "wpm": 49.6,
+    "silence_sec": 17.85,
+    "fillers": 0
+  },
+  "text": {
+    "sentiment": {
+      "label": "neutral",
+      "score": 0.7078890800476074
+    },
+    "summary": " Question 1, question 2, qu'est-ce que le nat est Ã  quoi sert-il ? Question 3, qu't-est-c that la diffÃ©rence"
+  },
+  "nonverbal": {
+    "eye_contact_ratio": 0.7,
+    "nods": 6,
+    "emotions": {
+      "model": "emotion-ferplus-onnx",
+      "samples": 85,
+      "distribution": {
+        "neutral": 1.0,
+        "happiness": 0.0,
+        "surprise": 0.0,
+        "sadness": 0.0,
+        "anger": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "contempt": 0.0
+      },
+      "dominant_emotion": "neutral",
+      "timeline": [
+        {
+          "t": 0.0,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 0.44,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 0.89,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 1.33,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 1.77,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 2.21,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 2.66,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 3.1,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 3.54,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 3.99,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 4.43,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 4.87,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 5.31,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 5.76,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 6.2,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 6.64,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 7.09,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 7.53,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 7.97,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 8.41,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 8.86,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 9.3,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 9.74,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 10.19,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 10.63,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 11.07,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 11.51,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 11.96,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 12.4,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 12.84,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 13.29,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 13.73,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 14.17,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 14.61,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 15.06,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 15.5,
+          "emotion": "neutral",
+          "prob": 0.7442
+        },
+        {
+          "t": 15.94,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 16.39,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 16.83,
+          "emotion": "neutral",
+          "prob": 0.7443
+        },
+        {
+          "t": 17.27,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 17.71,
+          "emotion": "neutral",
+          "prob": 0.7444
+        },
+        {
+          "t": 18.16,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 18.6,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 19.04,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 19.49,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 19.93,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 20.37,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 20.81,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 21.26,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 21.7,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 22.14,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 22.59,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 23.03,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 23.47,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 23.91,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 24.36,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 24.8,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 25.24,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 25.69,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 26.13,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 26.57,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 27.01,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 27.46,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 27.9,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 28.34,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 28.79,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 29.23,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 29.67,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 30.11,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 30.56,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 31.0,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 31.44,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 31.89,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 32.33,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 32.77,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 33.22,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 33.66,
+          "emotion": "neutral",
+          "prob": 0.7446
+        },
+        {
+          "t": 34.1,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 34.54,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 34.99,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 35.43,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 35.87,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 36.32,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 36.76,
+          "emotion": "neutral",
+          "prob": 0.7445
+        },
+        {
+          "t": 37.2,
+          "emotion": "neutral",
+          "prob": 0.7445
+        }
+      ],
+      "smoothed_win": 3,
+      "sample_fps": 2,
+      "max_width": 960
+    }
+  },
+  "qa": {
+    "verbal_from_qa": 12.0,
+    "scores": {
+      "avg_out_of_10": 3.0,
+      "items": [
+        {
+          "idx": 0,
+          "question": "Q1. Quelle est la diffÃ©rence entre une adresse IP privÃ©e et une adresse IP publique ?",
+          "answer_preview": "Question 1, question 2, qu'est-ce que le nat est Ã ",
+          "scores": {
+            "sim": 0.594,
+            "ce": 0.002,
+            "final": 0.209,
+            "out_of_10": 0.1
+          }
+        },
+        {
+          "idx": 1,
+          "question": "Q7. Quâ€™est-ce que le NAT et Ã  quoi sert-il ?",
+          "answer_preview": " quoi sert-il ? Question 3, qu'est-ce que la diffÃ©",
+          "scores": {
+            "sim": 0.676,
+            "ce": 0.981,
+            "final": 0.874,
+            "out_of_10": 8.4
+          }
+        },
+        {
+          "idx": 2,
+          "question": "Q11. Quelle est la diffÃ©rence entre routage statique et routage dynamique ?",
+          "answer_preview": "rence entre hÃ´te Ã  chetatique et hÃ´te Ã  dynamique ",
+          "scores": {
+            "sim": 0.668,
+            "ce": 0.003,
+            "final": 0.236,
+            "out_of_10": 0.4
+          }
+        }
+      ]
+    }
+  },
+  "scores": {
+    "verbal": 19.5,
+    "paraverbal": 2.0,
+    "nonverbal": 35.6,
+    "raw_total": 57.1,
+    "total": 48.6,
+    "quality": "low_confidence",
+    "reason": {
+      "duration_sec": 37.47,
+      "wpm": 49.6,
+      "silence_ratio": 0.476
+    },
+    "penalty": 0.15
+  }
+}

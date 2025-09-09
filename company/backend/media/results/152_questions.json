@@ -1,0 +1,1 @@
+[{"question": "F. Expliquez la différence entre une fonction passée par valeur et par référence", "seconds": 60.0}, {"question": "M. Quelle est la différence entre une classe et une structure (class vs struct) en C++ ?", "seconds": 90.0}, {"question": "D. Expliquez ce qu’est le move semantics (&&, std::move) et son utilité.", "seconds": 90.0}]

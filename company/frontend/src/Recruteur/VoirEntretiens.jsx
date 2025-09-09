@@ -917,7 +917,18 @@ const VoirEntretiens = () => {
                   <CandidateMeta>
                     <CandidateDate>
                       <CalendarIcon style={{ width: 14, height: 14 }} />
-                      {interview.date_limite ? new Date(interview.date_limite).toLocaleDateString("fr-FR") : ""}
+
+
+
+
+
+
+
+
+
+
+
+                      {interview.date_debut ? new Date(interview.date_debut).toLocaleDateString("fr-FR") : ""}
                     </CandidateDate>
                     {interview.score ? (
                       <CandidateScore score={interview.score}>

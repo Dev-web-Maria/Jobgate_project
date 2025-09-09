@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { toBlobURL } from "@ffmpeg/util";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
+const API_BASE = "http://localhost:8000/api/entretiens";
 
 const MAX_RESPONSE_TIME = 60;
 const READ_SECONDS = 30;
@@ -106,6 +108,46 @@ const CamOverlay = styled.div`
   }
 `;
 
+// Placeholder cam en review
+const CamPlaceholder = styled.div`
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  color:#64748b; font-weight:700; background:#f1f5f9;
+`;
+
+// Overlay d’upload/merge (bloque interactions)
+const BlockingOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(243, 246, 251, 0.78);
+  backdrop-filter: blur(1px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  pointer-events: all;
+`;
+const Spinner = styled.div`
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 3px solid #9ec5fe; border-top-color: transparent;
+  animation: ${spin} 0.8s linear infinite; margin-right: 10px;
+`;
+const UploadBox = styled.div`
+  display:flex; align-items:center; gap:10px; font-weight:700; color:#1f2a44;
+  background:#ffffff; border:1px solid #dce7f7; border-radius:12px; padding:14px 18px; box-shadow:0 6px 18px rgba(0,0,0,.06);
+`;
+const UploadSub = styled.div`
+  margin-top:10px; color:#4a5568; font-size:0.95rem; text-align:center;
+`;
+const UploadBar = styled.div`
+  width: 320px; height: 8px; background:#e9eef7; border-radius:7px; overflow:hidden; margin-top:10px;
+`;
+const UploadFill = styled.div`
+  height:100%; width:${p=>p.$w}%; background:linear-gradient(90deg,#004085,#3b82f6);
+  transition: width .2s ease; border-radius:7px;
+`;
+
 // Réponses
 const AnswersCard = styled(Card)`
   margin-top: 18px; width: 100%; max-width: 100%; box-sizing: border-box; padding: 22px 22px 18px 22px;
@@ -124,9 +166,19 @@ const SegmentItem = styled.div`
   .dl:hover{background:#3a5a8a;}
 `;
 
+// Bouton transmettre (en bas uniquement)
+const SendBtn = styled.button`
+  display:inline-flex; align-items:center; gap:10px;
+  background:#004085; color:#fff; border:none; border-radius:10px;
+  padding:12px 18px; font-weight:700; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  &:disabled { background:#cbd5e1; cursor:not-allowed; }
+`;
+
 // ---------------- Component ----------------
 export default function Interview() {
   const { token } = useParams();
+  const navigate = useNavigate();
 
   const [interviewData, setInterviewData] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -143,26 +195,56 @@ export default function Interview() {
   const [camReady, setCamReady] = useState(false);
   const [showCamPrompt, setShowCamPrompt] = useState(false);
 
-  const [isMerging, setIsMerging] = useState(false);
-  const [mergedVideoUrl, setMergedVideoUrl] = useState(null);
-
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  // Upload / merge overlay + progress
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [mergedVideoUrl, setMergedVideoUrl] = useState(null);
+
+  // Étape review (aperçu AVANT envoi)
+  const [reviewMode, setReviewMode] = useState(false);
 
   const videoRef = useRef(null);
   const readTimerRef = useRef(null);
   const ansTimerRef = useRef(null);
 
+  // interviewFinished = true UNIQUEMENT après upload réussi
   const interviewFinished = useRef(false);
 
-  // Garde-fous contre les doubles appels
+  // Garde-fous
   const fetchedOnceRef = useRef(false);
   const startedOnceRef = useRef(false);
 
-  // -------- Normalise les questions pour TOUJOURS lire la même liste que le recruteur
+  // Anti refresh / multi onglets
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const tabIdRef = useRef(`${Date.now()}-${Math.random()}`);
+  const lockKey = `interview.lock.${token}`;
+
+  const authHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem('access_token') || ''}`,
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  });
+
+  const expirerEntretien = async (reason = 'navigation_or_refresh') => {
+    try {
+      const res = await fetch(`${API_BASE}/${token}/expirer/`, {
+        method: 'POST',
+        headers: authHeaders(),
+        credentials: 'include',
+        body: JSON.stringify({ reason })
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  };
+
+  // -------- Normalise questions (utilisé avant review) --------
   function normalizeQuestionsFromAPI(payload) {
-    // 1) Priorité à questions_selectionnees (même ordre, même contenu que côté recruteur)
     if (Array.isArray(payload?.questions_selectionnees) && payload.questions_selectionnees.length > 0) {
       return payload.questions_selectionnees
         .sort((a,b) => (a.ordre ?? 0) - (b.ordre ?? 0))
@@ -173,7 +255,6 @@ export default function Interview() {
           return { texte, duree_limite: Number(duree) || MAX_RESPONSE_TIME };
         });
     }
-    // 2) Sinon, fallback sur d.questions si l’API a renvoyé la liste brute
     if (Array.isArray(payload?.questions) && payload.questions.length > 0) {
       return payload.questions.map(q => {
         const texte = q.texte ?? q.question__texte ?? "";
@@ -189,8 +270,7 @@ export default function Interview() {
     setIsLoading(true);
     setError(null);
     try {
-      // 1) statut
-      const r = await fetch(`http://localhost:8000/api/entretiens/${token}/statut/`, {
+      const r = await fetch(`${API_BASE}/${token}/statut/`, {
         headers: { Accept: "application/json", Authorization: `Bearer ${localStorage.getItem("access_token")||""}` },
         credentials: "include",
       });
@@ -206,27 +286,19 @@ export default function Interview() {
       let d = j.data || {};
       const normalizedQs = normalizeQuestionsFromAPI(d);
 
-      setInterviewData({
-        ...d,
-        questions: normalizedQs,
-      });
+      setInterviewData({ ...d, questions: normalizedQs });
       setRecordedVideos(Array(normalizedQs.length).fill(null));
       recordedVideosRef.current = Array(normalizedQs.length).fill(null);
 
-      // 2) démarrer si et seulement si PENDING et pas encore tenté
       if (d.statut === "PENDING" && !startedOnceRef.current) {
         startedOnceRef.current = true;
-        const r2 = await fetch(`http://localhost:8000/api/entretiens/${token}/demarrer/`, {
+        const r2 = await fetch(`${API_BASE}/${token}/demarrer/`, {
           method: "POST",
-          headers: {
-            "Content-Type":"application/json",
-            Authorization: `Bearer ${localStorage.getItem("access_token")||""}`
-          },
+          headers: { "Content-Type":"application/json", Authorization: `Bearer ${localStorage.getItem("access_token")||""}` },
           credentials: "include",
           body: JSON.stringify({})
         });
 
-        // Tolérer “déjà en cours” pour être idempotent
         let j2 = null;
         try { j2 = await r2.json(); } catch {}
         if (!r2.ok) {
@@ -234,17 +306,15 @@ export default function Interview() {
           const already = r2.status === 400 && /déjà/i.test(msg) && /cours/i.test(msg);
           if (!already) throw new Error(msg || "Échec du démarrage de l'entretien");
         } else {
-          // mise à jour locale si l’API renvoie des champs
           const upd = j2?.data || {};
-          setInterviewData(prev => prev ? ({
-            ...prev,
-            statut: upd.statut ?? prev.statut,
-            date_limite: upd.date_limite ?? prev.date_limite,
-          }) : prev);
+          setInterviewData(prev => prev ? ({ ...prev, statut: upd.statut ?? prev.statut, date_limite: upd.date_limite ?? prev.date_limite }) : prev);
         }
 
-        // 3) Re-fetch du statut pour figer la sélection renvoyée côté serveur
-        const r3 = await fetch(`http://localhost:8000/api/entretiens/${token}/statut/`, {
+        if (typeof (window).__setInterviewLock__ === 'function') {
+          (window).__setInterviewLock__();
+        }
+
+        const r3 = await fetch(`${API_BASE}/${token}/statut/`, {
           headers: { Accept:"application/json", Authorization:`Bearer ${localStorage.getItem("access_token")||""}` },
           credentials: "include",
         });
@@ -252,13 +322,16 @@ export default function Interview() {
         if (r3.ok && j3?.data) {
           d = j3.data;
           const normalized2 = normalizeQuestionsFromAPI(d);
-          setInterviewData({
-            ...d,
-            questions: normalized2,
-          });
+          setInterviewData({ ...d, questions: normalized2 });
           setRecordedVideos(Array(normalized2.length).fill(null));
           recordedVideosRef.current = Array(normalized2.length).fill(null);
         }
+      } else {
+        if (d.statut === "IN_PROGRESS" && typeof (window).__setInterviewLock__ === 'function') {
+          (window).__setInterviewLock__();
+        }
+        if (d.statut === "EXPIRED" || d.statut === "EXPIRE") setError("Cet entretien a expiré.");
+        if (d.statut === "COMPLETED" || d.statut === "TERMINE") setError("Vous avez déjà terminé cet entretien.");
       }
     } catch (err) {
       console.error(err);
@@ -268,7 +341,7 @@ export default function Interview() {
     }
   };
 
-  // ------------------ Mount: empêcher double run en dev (StrictMode) ------------------
+  // Mount unique
   useEffect(() => {
     if (fetchedOnceRef.current) return;
     fetchedOnceRef.current = true;
@@ -321,14 +394,15 @@ export default function Interview() {
       clearInterval(readTimerRef.current);
       clearInterval(ansTimerRef.current);
       try { stream?.getTracks().forEach(t=>t.stop()); } catch {}
+      try { localStorage.removeItem(lockKey); } catch {}
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ---------- Timers par question
+  // ---------- Timers par question (masqués en review)
   useEffect(() => {
     if (!interviewData) return;
-    if (interviewFinished.current) {
+    if (reviewMode || interviewFinished.current) {
       clearInterval(readTimerRef.current);
       clearInterval(ansTimerRef.current);
       return;
@@ -357,9 +431,9 @@ export default function Interview() {
     );
     setCountdown(limit);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interviewData, currentQuestion]);
+  }, [interviewData, currentQuestion, reviewMode]);
 
-  // ---------- Recording (flush avant stop)
+  // ---------- Recording
   const startRecording = (e) => {
     e?.preventDefault();
     try {
@@ -393,28 +467,27 @@ export default function Interview() {
         const allDone = recordedVideosRef.current.slice(0, total).every(b => b && b.size > 0);
 
         if (allDone && currentQuestion >= total - 1) {
-          interviewFinished.current = true;
-          clearInterval(readTimerRef.current);
-          clearInterval(ansTimerRef.current);
-          setReadElapsed(0);
-          setCountdown(0);
+          // Fin d'enregistrement → review
+          setReviewMode(true);
 
+          // stop cam mais laisser la zone visible (placeholder)
           try { stream?.getTracks().forEach(t => t.stop()); } catch {}
           const v = videoRef.current;
           if (v) { try { v.pause(); } catch {} v.srcObject = null; }
+          setCamReady(false);
         } else {
           setCurrentQuestion(q => q + 1);
         }
       };
 
-      rec.start(); // pas de timeslice
+      rec.start();
       setIsRecording(true);
 
       clearInterval(ansTimerRef.current);
       ansTimerRef.current = setInterval(() => {
         setCountdown(prev => {
           if (prev <= 1) {
-            try { rec.requestData?.(); } catch {}   // 🔧 flush
+            try { rec.requestData?.(); } catch {}
             try { rec.stop(); } catch {}
             return 0;
           }
@@ -431,7 +504,7 @@ export default function Interview() {
     e?.preventDefault();
     clearInterval(ansTimerRef.current);
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
-      try { mediaRecorderRef.current.requestData?.(); } catch {}  // 🔧 flush manuel
+      try { mediaRecorderRef.current.requestData?.(); } catch {}
       try { mediaRecorderRef.current.stop(); } catch {}
     }
   };
@@ -454,55 +527,247 @@ export default function Interview() {
     loadFFmpeg();
   }, []);
 
+  // ----------- Upload segments + overlay/progress + redirect (logs) -----------
+  const uploadSegments = async () => {
+    console.groupCollapsed("📤 uploadSegments");
+    console.time("⏱️ uploadSegments");
+    console.log("🚀 Envoi des segments vers le backend…");
 
-  // ----------- MergeVideos (concat copy) -----------
-// ----------- Upload segments vers le backend (robuste) -----------
-const uploadSegments = async () => {
-  console.log("🚀 Envoi des segments vers le backend…");
-
-  const formData = new FormData();
-  recordedVideos.forEach((blob, i) => {
-    formData.append("videos", blob, `part${i}.webm`);
-    console.log(`📦 Segment ${i} ajouté au formData`);
-  });
-
-  try {
-    const resp = await fetch(`http://localhost:8000/api/entretiens/${token}/upload_segments/`, {
-      method: "POST",
-      body: formData,
+    const formData = new FormData();
+    let totalBytes = 0;
+    recordedVideos.forEach((blob, i) => {
+      formData.append("videos", blob, `part${i}.webm`);
+      console.log(`📦 Segment ${i} ajouté au formData`, { name: `part${i}.webm`, type: blob?.type, size: blob?.size });
+      totalBytes += blob?.size || 0;
     });
+    console.log(`🧮 Taille totale estimée à l’upload: ${totalBytes.toLocaleString()} bytes`);
 
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || "Upload échoué");
+    setIsUploading(true);
+    setUploadProgress(0);
+    console.log("🪟 Overlay d’upload activé, progression réinitialisée à 0%");
 
-    console.log("✅ Segments envoyés, vidéo finale:", data.video);
-    setMergedVideoUrl(data.video);
+    await new Promise((resolve) => {
+      const url = `${API_BASE}/${token}/upload_segments/`;
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      console.log("🔧 XHR ouvert:", { method: "POST", url });
 
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 4000);
-  } catch (err) {
-    console.error("❌ Erreur upload:", err);
-    setError("Échec de l'envoi des vidéos");
-  }
-};
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+          const pct = Math.round((e.loaded / e.total) * 100);
+          setUploadProgress(pct);
+          console.log(`📶 Progression upload: ${pct}% (${e.loaded}/${e.total} bytes)`);
+        } else {
+          console.log("📶 Progression non chiffrable", { loaded: e.loaded, total: e.total });
+        }
+      };
 
+      xhr.onreadystatechange = () => {
+        console.log("🔁 XHR readyState:", { readyState: xhr.readyState, status: xhr.status });
+        if (xhr.readyState === 4) {
+          let data = null;
+          try {
+            data = JSON.parse(xhr.responseText || "{}");
+            console.log("📨 Réponse JSON du serveur:", data);
+          } catch (parseErr) {
+            console.warn("⚠️ Échec parsing JSON", parseErr, "→ brut:", (xhr.responseText || "").slice(0, 300));
+          }
 
+          if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("✅ Segments envoyés avec succès, URL vidéo finale:", data?.video);
+            setMergedVideoUrl(data?.video || null);
 
-// ----------- Déclencher l’upload quand toutes les réponses sont là -----------
-useEffect(() => {
-  if (
-    interviewData &&
-    recordedVideos.length === (interviewData.questions?.length || 0) &&
-    recordedVideos.every(video => video !== null)
-  ) {
-    uploadSegments(); // ⬅️ nouveau au lieu de mergeVideos()
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [recordedVideos, interviewData]);
+            // entretien terminé côté UX
+            interviewFinished.current = true;
 
+            setShowSuccess(true);
+            console.log("🟩 Toast de succès affiché");
 
+            setIsUploading(false);
+            console.log("🪟 Overlay d’upload désactivé");
 
+            console.timeEnd("⏱️ uploadSegments");
+            console.groupEnd();
 
+            setTimeout(() => {
+              console.log("➡️ Redirection vers /candidat/dashboard");
+              navigate("/candidat/dashboard");
+            }, 1800);
+          } else {
+            const errMsg = data?.error || `HTTP ${xhr.status}`;
+            console.error("❌ Erreur upload (statut HTTP)", xhr.status, "-", errMsg);
+            setIsUploading(false);
+            setError(errMsg || "Échec de l'envoi des vidéos");
+            console.timeEnd("⏱️ uploadSegments");
+            console.groupEnd();
+          }
+          resolve();
+        }
+      };
+
+      xhr.onerror = () => {
+        console.error("💥 Erreur réseau pendant l’envoi des vidéos.");
+        setIsUploading(false);
+        setError("Erreur réseau pendant l’envoi des vidéos.");
+        console.timeEnd("⏱️ uploadSegments");
+        console.groupEnd();
+        resolve();
+      };
+
+      xhr.onabort = () => {
+        console.warn("⛔ Envoi annulé.");
+        setIsUploading(false);
+        setError("Envoi annulé.");
+        console.timeEnd("⏱️ uploadSegments");
+        console.groupEnd();
+        resolve();
+      };
+
+      console.log("📮 Envoi du FormData via XHR…");
+      xhr.send(formData);
+    });
+  };
+
+  // ======== Anti refresh / fermeture / BFCache ========
+  useEffect(() => {
+    const onBeforeUnload = (e) => {
+      if (isUploading) {
+        e.preventDefault();
+        e.returnValue = '';
+        return;
+      }
+      if (!interviewFinished.current && !isRefreshing) {
+        e.preventDefault();
+        e.returnValue = '';
+        setIsRefreshing(true);
+        try {
+          const blob = new Blob([JSON.stringify({ reason: 'beforeunload' })], { type: 'application/json' });
+          window.navigator.sendBeacon?.(`${API_BASE}/${token}/expirer/`, blob);
+        } catch {}
+      }
+    };
+
+    const onPageHide = (ev) => {
+      if (isUploading) return;
+      if (!interviewFinished.current && !ev.persisted) {
+        try {
+          const blob = new Blob([JSON.stringify({ reason: 'pagehide' })], { type: 'application/json' });
+          window.navigator.sendBeacon?.(`${API_BASE}/${token}/expirer/`, blob);
+        } catch {}
+      }
+    };
+
+    const onPageShow = (ev) => {
+      if (isUploading) return;
+      if (ev.persisted && !interviewFinished.current) {
+        (async () => {
+          await expirerEntretien('bfcache_restore');
+          setError("Ce lien d'entretien ne peut être lancé qu'une seule fois. Il est désormais expiré.");
+        })();
+      }
+    };
+
+    window.addEventListener('beforeunload', onBeforeUnload);
+    window.addEventListener('pagehide', onPageHide);
+    window.addEventListener('pageshow', onPageShow);
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload);
+      window.removeEventListener('pagehide', onPageHide);
+      window.removeEventListener('pageshow', onPageShow);
+    };
+  }, [token, isRefreshing, isUploading]);
+
+  // ======== Bloquer bouton "Back" ========
+  useEffect(() => {
+    const push = () => {
+      try { window.history.pushState({ __blockBack: true }, "", window.location.href); } catch {}
+    };
+    push();
+
+    const onPop = (ev) => {
+      if (isUploading) {
+        push();
+        ev.preventDefault?.();
+        return;
+      }
+      if (!interviewFinished.current) {
+        push();
+        setError("Lien expiré (retour arrière détecté).");
+        expirerEntretien('back_button');
+        ev.preventDefault?.();
+        ev.stopImmediatePropagation?.();
+      }
+    };
+
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [isUploading]);
+
+  // ======== Bloquer navigation par liens ========
+  useEffect(() => {
+    const handleClick = (e) => {
+      const link = e.target.closest?.('a');
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href) return;
+      const same = href === window.location.pathname || href === window.location.href;
+
+      if (!same && isUploading) {
+        e.preventDefault();
+        setError("Transmission en cours — veuillez rester sur la page…");
+        return;
+      }
+      if (!same && !interviewFinished.current) {
+        e.preventDefault();
+        expirerEntretien('anchor_navigation');
+        setError("Lien expiré : la page d'entretien ne peut pas être quittée.");
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [isUploading]);
+
+  // ======== Anti multi-onglets ========
+  useEffect(() => {
+    const channelName = 'interview-channel';
+    const bc = "BroadcastChannel" in window ? new BroadcastChannel(channelName) : null;
+
+    const broadcastLock = () => {
+      bc?.postMessage({ type: "LOCK", t: token, tabId: tabIdRef.current });
+    };
+
+    const onMsg = async (ev) => {
+      const { type, t, tabId } = ev.data || {};
+      if (type === "LOCK" && t === token && tabId !== tabIdRef.current && !interviewFinished.current) {
+        await expirerEntretien('second_tab');
+        setError("Ce lien est déjà ouvert ailleurs. Il est désormais expiré.");
+      }
+    };
+    bc?.addEventListener("message", onMsg);
+
+    const onStorage = async (e) => {
+      if (e.key === lockKey && e.newValue && e.newValue !== tabIdRef.current && !interviewFinished.current) {
+        await expirerEntretien('second_tab_storage');
+        setError("Ce lien est déjà ouvert ailleurs. Il est désormais expiré.");
+      }
+    };
+    window.addEventListener("storage", onStorage);
+
+    const setLock = () => {
+      try { localStorage.setItem(lockKey, tabIdRef.current); } catch {}
+      broadcastLock();
+    };
+    (window).__setInterviewLock__ = setLock;
+
+    return () => {
+      bc?.removeEventListener("message", onMsg);
+      bc?.close?.();
+      window.removeEventListener("storage", onStorage);
+      try { localStorage.removeItem(lockKey); } catch {}
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   // ------- UI -------
   if (isLoading) return <Container><Welcome>Chargement…</Welcome></Container>;
@@ -516,11 +781,12 @@ useEffect(() => {
   const qAnswerSec = Number(q.duree_limite || MAX_RESPONSE_TIME);
   const progressPercent = ((Math.min(currentQuestion + 1, total)) / total) * 100;
 
-  const showSegments = recordedVideos.length === total && recordedVideos.every(b => b && b.size > 0);
+  const allSegmentsReady = recordedVideos.length === total && recordedVideos.every(b => b && b.size > 0);
+  const showSegments = allSegmentsReady;
 
   return (
     <Container>
-      {/* Popup vert de succès après upload */}
+      {/* Toast succès + redirection */}
       {showSuccess && (
         <div style={{
           position: "fixed",
@@ -540,6 +806,19 @@ useEffect(() => {
         </div>
       )}
 
+      {/* Overlay bloquant pendant upload/merge */}
+      {isUploading && (
+        <BlockingOverlay aria-live="polite" aria-busy="true">
+          <UploadBox>
+            <Spinner />
+            <div>Transmission des réponses en cours…</div>
+          </UploadBox>
+          <UploadSub>Merci de ne pas fermer ou quitter cette page pendant l’envoi et le traitement.</UploadSub>
+          <UploadBar><UploadFill $w={uploadProgress} /></UploadBar>
+          <div style={{ marginTop: 8, color: "#4a5568", fontWeight: 700 }}>{uploadProgress}%</div>
+        </BlockingOverlay>
+      )}
+
       <Welcome>Bienvenue {interviewData.candidat?.nomComplet || ""}</Welcome>
       <ProgressBarContainer>
         <ProgressBarWrapper>
@@ -549,100 +828,105 @@ useEffect(() => {
         </ProgressBarWrapper>
       </ProgressBarContainer>
 
-      <Wrapper>
+      <Wrapper aria-hidden={isUploading}>
         <MainLayout>
-          {/* Gauche */}
-          <LeftColumn>
-            <CardQuestion>
-              <CardTitleRow>
-                <span style={{ color:"#007bff" }}>○</span>
-                {qTitle}
-                <span style={{marginLeft:"auto",color:"#007bff",fontWeight:600,fontSize:13,background:"#e1f0ff",borderRadius:8,padding:"6px 14px"}}>
-                  Question {Math.min(currentQuestion + 1, total)}/{total}
-                </span>
-              </CardTitleRow>
+          {/* Gauche : MASQUÉE en review (plus de questions/timer) */}
+          {!reviewMode && (
+            <LeftColumn>
+              <CardQuestion>
+                <CardTitleRow>
+                  <span style={{ color:"#007bff" }}>○</span>
+                  {qTitle}
+                  <span style={{marginLeft:"auto",color:"#007bff",fontWeight:600,fontSize:13,background:"#e1f0ff",borderRadius:8,padding:"6px 14px"}}>
+                    Question {Math.min(currentQuestion + 1, total)}/{total}
+                  </span>
+                </CardTitleRow>
 
-              <CardQuestionDetails>{qText}</CardQuestionDetails>
+                <CardQuestionDetails>{qText}</CardQuestionDetails>
 
-              <hr style={{border:0,borderTop:"1px solid #eef2f7",margin:"10px 0 14px"}} />
-              <CardQuestionMeta>
-                <CardMetaSpan $orange>30s pour lire</CardMetaSpan>
-                <CardMetaSpan $blue>{qAnswerSec}s pour répondre</CardMetaSpan>
-                <span><span style={{color:"#004085",fontWeight:700}}>{Math.min(currentQuestion + 1, total)}</span> sur {total}</span>
-              </CardQuestionMeta>
-            </CardQuestion>
+                <hr style={{border:0,borderTop:"1px solid #eef2f7",margin:"10px 0 14px"}} />
+                <CardQuestionMeta>
+                  <CardMetaSpan $orange>30s pour lire</CardMetaSpan>
+                  <CardMetaSpan $blue>{qAnswerSec}s pour répondre</CardMetaSpan>
+                  <span><span style={{color:"#004085",fontWeight:700}}>{Math.min(currentQuestion + 1, total)}</span> sur {total}</span>
+                </CardQuestionMeta>
+              </CardQuestion>
 
-            <CardTimer>
-              <CardTimerTitle>
-                {interviewFinished.current ? "Entretien terminé" : (isRecording ? "Temps de réponse" : "Temps de lecture")}
-              </CardTimerTitle>
-              <CardTimerValue $phase={isRecording ? "record" : "prep"}>
-                {interviewFinished.current
-                  ? `0:00`
-                  : (isRecording
-                      ? `0:${String(countdown).padStart(2,"0")}`
-                      : `0:${String(Math.max(0, READ_SECONDS - readElapsed)).padStart(2,"0")}`)}
-                {!interviewFinished.current && (
+              <CardTimer>
+                <CardTimerTitle>
+                  {isRecording ? "Temps de réponse" : "Temps de lecture"}
+                </CardTimerTitle>
+                <CardTimerValue $phase={isRecording ? "record" : "prep"}>
+                  {isRecording
+                    ? `0:${String(countdown).padStart(2,"0")}`
+                    : `0:${String(Math.max(0, READ_SECONDS - readElapsed)).padStart(2,"0")}`}
                   <span style={{fontSize:15,color:"#888",fontWeight:500,marginLeft:8}}>En cours</span>
-                )}
-              </CardTimerValue>
-              <CardTimerProgressBar>
-                <CardTimerProgressFill
-                  $phase={isRecording ? "record" : "prep"}
-                  $progress={
-                    interviewFinished.current
-                      ? 100
-                      : (isRecording
-                          ? (1 - (countdown / qAnswerSec)) * 100
-                          : (1 - (Math.min(readElapsed, READ_SECONDS) / READ_SECONDS)) * 100)
-                  }
-                />
-              </CardTimerProgressBar>
-              <CardTimerDesc>
-                {interviewFinished.current
-                  ? "Merci ! Vos réponses ont été transmises."
-                  : (isRecording ? "Enregistrez votre réponse" : "Lisez attentivement la question")}
-              </CardTimerDesc>
-            </CardTimer>
-          </LeftColumn>
+                </CardTimerValue>
+                <CardTimerProgressBar>
+                  <CardTimerProgressFill
+                    $phase={isRecording ? "record" : "prep"}
+                    $progress={
+                      isRecording
+                        ? (1 - (countdown / qAnswerSec)) * 100
+                        : (1 - (Math.min(readElapsed, READ_SECONDS) / READ_SECONDS)) * 100
+                    }
+                  />
+                </CardTimerProgressBar>
+                <CardTimerDesc>
+                  {isRecording ? "Enregistrez votre réponse" : "Lisez attentivement la question"}
+                </CardTimerDesc>
+              </CardTimer>
+            </LeftColumn>
+          )}
 
-          {/* Droite */}
+          {/* Droite : Zone caméra TOUJOURS affichée.
+              - En enregistrement: vidéo active
+              - En review: placeholder gris (cam désactivée) */}
           <RightColumn>
             <VideoContainer>
               <VideoBox>
-                <LiveVideo ref={videoRef} autoPlay muted playsInline disablePictureInPicture />
-                {!camReady && !stream && <LoadingCam>Chargement de la caméra…</LoadingCam>}
-                {(!camReady || showCamPrompt) && (
-                  <CamOverlay>
-                    <div>
-                      Autorisez l’accès <b>caméra & micro</b> dans votre navigateur.<br/>
-                      Si l’image ne démarre pas, cliquez ci-dessous.
-                    </div>
-                    <button onClick={enableCamera}>Activer la caméra</button>
-                  </CamOverlay>
+                {!reviewMode ? (
+                  <>
+                    <LiveVideo ref={videoRef} autoPlay muted playsInline disablePictureInPicture />
+                    {!camReady && !stream && <LoadingCam>Chargement de la caméra…</LoadingCam>}
+                    {(!camReady || showCamPrompt) && (
+                      <CamOverlay>
+                        <div>
+                          Autorisez l’accès <b>caméra & micro</b> dans votre navigateur.<br/>
+                          Si l’image ne démarre pas, cliquez ci-dessous.
+                        </div>
+                        <button onClick={enableCamera}>Activer la caméra</button>
+                      </CamOverlay>
+                    )}
+                  </>
+                ) : (
+                  <CamPlaceholder>Enregistrement terminé — aperçu des réponses ci-dessous</CamPlaceholder>
                 )}
               </VideoBox>
 
-              {!interviewFinished.current && (
-                isRecording ? (
-                  <CTA $stop $recording onClick={stopRecording}>Arrêter l'enregistrement</CTA>
-                ) : (
-                  <CTA onClick={startRecording} disabled={!!recordedVideos[currentQuestion]}>
-                    {recordedVideos[currentQuestion] ? "Réponse enregistrée" : "Commencer à répondre"}
-                  </CTA>
+              {!reviewMode && (
+                !interviewFinished.current && (
+                  isRecording ? (
+                    <CTA $stop $recording onClick={stopRecording} disabled={isUploading}>Arrêter l'enregistrement</CTA>
+                  ) : (
+                    <CTA onClick={startRecording} disabled={!!recordedVideos[currentQuestion] || isUploading}>
+                      {recordedVideos[currentQuestion] ? "Réponse enregistrée" : "Commencer à répondre"}
+                    </CTA>
+                  )
                 )
               )}
             </VideoContainer>
           </RightColumn>
         </MainLayout>
 
-        {/* Réponses */}
+        {/* Étape REVIEW : lecture des segments + bouton Transmettre (EN BAS SEULEMENT) */}
         {showSegments && (
           <AnswersCard>
             <AnswersHeader>
-              <div>Réponses</div>
+              <div>Réponses (aperçu)</div>
               <span className="badge">{recordedVideos.length} / {total} enregistrée(s)</span>
             </AnswersHeader>
+
             <SegmentsRow>
               {recordedVideos.map((blob, i) => (
                 <SegmentItem key={i}>
@@ -658,6 +942,7 @@ useEffect(() => {
                         document.body.appendChild(a); a.click(); a.remove();
                         setTimeout(()=>URL.revokeObjectURL(url),0);
                       }}
+                      disabled={isUploading}
                     >
                       Télécharger
                     </button>
@@ -666,6 +951,13 @@ useEffect(() => {
               ))}
             </SegmentsRow>
 
+            {reviewMode && !interviewFinished.current && (
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 12 }}>
+                <SendBtn onClick={uploadSegments} disabled={isUploading}>
+                  <span>📤 Transmettre mes réponses au recruteur</span>
+                </SendBtn>
+              </div>
+            )}
           </AnswersCard>
         )}
       </Wrapper>

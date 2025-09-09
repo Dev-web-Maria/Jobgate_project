@@ -35,6 +35,10 @@ urlpatterns = [
     path("api/entretiens/<int:pk>/", views.EntretienDetailView.as_view(), name="entretien-detail"),
     path("api/entretiens/<int:pk>/analyze/", views.EntretienAnalyzeView.as_view(), name="entretien-analyze"),
 
+    path("api/entretiens/<uuid:token>/expirer/", views.expirer_entretien, name="expirer_entretien"),
+    path('api/entretiens/<uuid:token>/start/', views.start_entretien, name='start-entretien'),
+
+
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

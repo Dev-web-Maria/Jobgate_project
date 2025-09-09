@@ -1,0 +1,230 @@
+{
+  "transcript": "On a une question à l'aise de la telle leader de l'autre. Je ne sais pas si c'est un cinéma, je ne vous ai pas dit à moi. Je vous ai dit à moi que je ne sais pas si je le répense.",
+  "speech": {
+    "duration_sec": 12.85,
+    "wpm": 214.8,
+    "silence_sec": 4.12,
+    "fillers": 0
+  },
+  "text": {
+    "sentiment": {
+      "label": "negative",
+      "score": 0.50055992603302
+    },
+    "summary": " On a question Ã  l'aise de la telle leader de l'autre. Je ne sais pas si c'est un cinÃ©ma, je ne sa"
+  },
+  "nonverbal": {
+    "eye_contact_ratio": 0.03,
+    "nods": 7,
+    "emotions": {
+      "model": "emotion-ferplus-onnx",
+      "samples": 27,
+      "distribution": {
+        "neutral": 1.0,
+        "happiness": 0.0,
+        "surprise": 0.0,
+        "sadness": 0.0,
+        "anger": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "contempt": 0.0
+      },
+      "dominant_emotion": "neutral",
+      "timeline": [
+        {
+          "t": 0.0,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 0.49,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 0.97,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 1.46,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 1.94,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 2.43,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 2.91,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 3.4,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 3.88,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 4.37,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 4.85,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 5.34,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 5.82,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 6.31,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 6.8,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 7.28,
+          "emotion": "neutral",
+          "prob": 0.7441
+        },
+        {
+          "t": 7.77,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 8.25,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 8.74,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 9.22,
+          "emotion": "neutral",
+          "prob": 0.7438
+        },
+        {
+          "t": 9.71,
+          "emotion": "neutral",
+          "prob": 0.744
+        },
+        {
+          "t": 10.19,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 10.68,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 11.16,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 11.65,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 12.13,
+          "emotion": "neutral",
+          "prob": 0.7439
+        },
+        {
+          "t": 12.62,
+          "emotion": "neutral",
+          "prob": 0.744
+        }
+      ],
+      "smoothed_win": 3,
+      "sample_fps": 2,
+      "max_width": 960
+    }
+  },
+  "qa": {
+    "verbal_from_qa": 0.0,
+    "scores": {
+      "avg_out_of_10": 0.0,
+      "items": [
+        {
+          "idx": 0,
+          "question": "F. Expliquez la diffÃ©rence entre une fonction passÃ©e par valeur et par rÃ©fÃ©rence",
+          "answer_preview": "On a une question Ã  l'aise de la telle leader de l'autre. J",
+          "scores": {
+            "sim": 0.55,
+            "ce": 0.0,
+            "final": 0.193,
+            "out_of_10": 0.0
+          }
+        },
+        {
+          "idx": 1,
+          "question": "M. Quelle est la diffÃ©rence entre une classe et une structure (class vs struct) en C++ ?",
+          "answer_preview": "e ne sais pas si c'est un cinÃ©ma, je ne vous ai pas dit Ã  m",
+          "scores": {
+            "sim": 0.524,
+            "ce": 0.001,
+            "final": 0.184,
+            "out_of_10": 0.0
+          }
+        },
+        {
+          "idx": 2,
+          "question": "D. Expliquez ce quâ€™est le move semantics (&&, std::move) et son utilitÃ©.",
+          "answer_preview": "oi. Je vous ai dit Ã  moi que je ne sais pas si je le rÃ©pens",
+          "scores": {
+            "sim": 0.592,
+            "ce": 0.0,
+            "final": 0.207,
+            "out_of_10": 0.1
+          }
+        }
+      ]
+    }
+  },
+  "scores": {
+    "verbal": 15.2,
+    "paraverbal": 6.9,
+    "nonverbal": 1.1,
+    "raw_total": 23.3,
+    "total": 16.3,
+    "quality": "low_confidence",
+    "reason": {
+      "duration_sec": 12.85,
+      "wpm": 214.8,
+      "silence_ratio": 0.321
+    },
+    "penalty": 0.3
+  }
+}

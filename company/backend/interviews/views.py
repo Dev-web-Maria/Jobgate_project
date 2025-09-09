@@ -16,6 +16,58 @@ from .models import Recruteur, Offre   # ✅ importer les deux modèles
 
 
 
+#------------------ Start interview (AJOUT) ------------------
+# views.py (AJOUT)
+from django.db import transaction
+from django.utils import timezone
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
+@api_view(['POST'])
+@transaction.atomic
+def start_entretien(request, token):
+    """
+    Consomme le lien d'entretien une seule fois.
+    - 200 si première utilisation (PENDING -> IN_PROGRESS)
+    - 409 si déjà démarré/terminé
+    - 410 si expiré
+    """
+    ent = get_object_or_404(Entretien.objects.select_for_update(), token=token)
+
+    # expiré par date_limite ou statut
+    if ent.current_statut == "EXPIRED" or ent.statut == "EXPIRED":
+        return Response({"status": "error", "message": "Lien expiré"}, status=status.HTTP_410_GONE)
+
+    # déjà en cours / terminé
+    if ent.statut in ("IN_PROGRESS", "COMPLETED") or ent.termine:
+        return Response({"status": "error", "message": "Entretien déjà démarré ou terminé"}, status=status.HTTP_409_CONFLICT)
+
+    if ent.statut != "PENDING":
+        return Response({"status": "error", "message": f"Statut invalide: {ent.statut}"}, status=status.HTTP_409_CONFLICT)
+
+    now = timezone.now()
+    ent.date_debut = now
+    if not ent.date_limite:
+        ent.date_limite = now + timezone.timedelta(days=7)
+
+    # forcer pour ne pas être recalculé par save()
+    ent.save(force_statut="IN_PROGRESS")
+
+    return Response({
+        "status": "success",
+        "data": {
+            "token": str(ent.token),
+            "statut": ent.statut,
+            "date_debut": ent.date_debut,
+            "date_limite": ent.date_limite
+        }
+    }, status=status.HTTP_200_OK)
+
+
+
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -430,7 +482,7 @@ def send_interview_links(request):
         # ✅ Filtrer sur le champ status de OffreCandidat (pas Candidat)
         offre_candidats = OffreCandidat.objects.filter(
             offre=offre,
-            status__in=['Entretient', 'EnProcessus']
+            status__in=['Entretient']
         )
 
         links = []
@@ -513,7 +565,7 @@ def get_candidat(request, candidat_id):
                 "offre__id", "offre__titre", "date_ajout"
             )),
             "entretiens": list(candidat.entretiens.values(
-                "offre__id", "offre__titre", "token", "date_limite"
+                "date_creation" , "offre__id", "offre__titre", "token", "date_limite"
             )),
         }
         return JsonResponse(data)
@@ -633,12 +685,17 @@ def demarrer_entretien(request, token):
     try:
         entretien = get_object_or_404(Entretien, token=token)
 
-        # Déjà démarré / terminé / expiré ?
+        # Cohérence des codes pour le front
+        if entretien.current_statut == "EXPIRED" or entretien.statut == "EXPIRED":
+            return Response({"status": "error", "message": "Lien expiré"}, status=status.HTTP_410_GONE)
+
+        if entretien.statut in ("IN_PROGRESS", "COMPLETED") or entretien.termine:
+            return Response({"status": "error", "message": f"Entretien déjà {entretien.get_statut_display()}"},
+                            status=status.HTTP_409_CONFLICT)
+
         if entretien.statut != "PENDING":
-            return Response({
-                "status": "error",
-                "message": f"L'entretien est déjà {entretien.get_statut_display()}"
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "error", "message": f"Statut invalide: {entretien.get_statut_display()}"},
+                            status=status.HTTP_409_CONFLICT)
 
         # Vérifier qu'il existe des questions attachées à l'offre
         total_questions_offre = Question.objects.filter(offre=entretien.offre).count()
@@ -1006,10 +1063,10 @@ class UploadSegmentsView(APIView):
 
         # 4️⃣ Mettre à jour l'entretien
         entretien.video_reponses.name = f"entretiens/{token}.webm"
-        entretien.statut = "completed"
+        entretien.statut = "COMPLETED"
         entretien.termine = True
         entretien.save()
-        print("📤 Entretien mis à jour -> statut=completed")
+        print("📤 Entretien mis à jour -> statut=COMPLETED")
 
         return JsonResponse({
             "status": "ok",
@@ -1235,6 +1292,83 @@ def _extract_questions(ent) -> list[dict]:
                 return items[:5]
 
     return []
+
+
+import logging
+from django.db import transaction
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
+from .models import Entretien
+
+logger = logging.getLogger(__name__)
+
+# ------------------ Expire interview ------------------
+@api_view(['POST'])
+@transaction.atomic
+def expirer_entretien(request, token):
+    """
+    Marque un entretien comme expiré (rafraîchissement, fermeture, retour).
+    """
+    try:
+        entretien = get_object_or_404(Entretien, token=token)
+
+        # Déjà expiré -> 410
+        if entretien.statut == "EXPIRED" or entretien.current_statut == "EXPIRED":
+            return Response({
+                "status": "ignored",
+                "message": "Déjà expiré",
+                "data": {
+                    "token": str(entretien.token),
+                    "statut": "EXPIRED",
+                    "statut_display": "Expiré",
+                }
+            }, status=status.HTTP_410_GONE)
+
+        # Terminé -> on ne change pas
+        if entretien.statut == "COMPLETED" or entretien.termine:
+            return Response({
+                "status": "ignored",
+                "message": "Entretien déjà terminé",
+                "data": {
+                    "token": str(entretien.token),
+                    "statut": "COMPLETED",
+                    "statut_display": "Terminé",
+                }
+            }, status=status.HTTP_200_OK)
+
+        # Seuls PENDING/IN_PROGRESS sont expirables
+        if entretien.statut not in ["PENDING", "IN_PROGRESS"]:
+            return Response({
+                "status": "error",
+                "message": f"Impossible d'expirer un entretien avec le statut: {entretien.get_statut_display()}"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Forcer l'expiration (évite le recalcul dans save())
+        entretien.save(force_statut="EXPIRED")
+
+        logger.info(f"✅ Entretien {entretien.token} marqué comme expiré")
+
+        return Response({
+            "status": "success",
+            "message": "Entretien expiré",
+            "data": {
+                "token": str(entretien.token),
+                "statut": "EXPIRED",
+                "statut_display": "Expiré",
+            }
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        logger.error(f"❌ Erreur lors de l'expiration de l'entretien {token}: {str(e)}")
+        return Response({
+            "status": "error",
+            "message": "Échec de l'expiration de l'entretien",
+            "error": str(e),
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 

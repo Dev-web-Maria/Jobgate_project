@@ -40,6 +40,7 @@ import Instructions from '../Candidat/Instructions';
 import Interview from '../Candidat/Interview';
 import VoirEntretiens from '../Recruteur/VoirEntretiens';
 import OffreDetail from '../Recruteur/OffreDetail';
+import FakeInterview from '../Candidat/FakeInterview';
 
 const Routing = () => {
   return (
@@ -49,8 +50,10 @@ const Routing = () => {
       <Route path="/recruteur/offre/:offreId" element={<OffreDetail />} />
       <Route path="/candidat/dashboard" element={<CandidatDashboard />} />
       <Route path="/candidat/dashboard/messagerie" element={<Messagerie />} />
+      <Route path='/candidat/dashboard/messagerie/TestInterview' element={<FakeInterview/>} />
       <Route path="/candidat/dashboard/messagerie/instructions/:token" element={<Instructions />} />
       <Route path="/candidat/dashboard/messagerie/instructions/interview/:token" element={<Interview />} />
+      <Route path="/entretien-video/:token" element={<Interview />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
